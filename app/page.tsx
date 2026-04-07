@@ -1,9 +1,12 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import {
   Code2,
   Crop,
   Image as ImageIcon,
+  Palette,
+  Search,
   Type
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
@@ -21,35 +24,43 @@ type Tool = {
 const tools: Tool[] = [
   {
     name: "ChopShop",
-    description: "Generate responsive <picture> tags and srcset attributes.",
+    description: "Create responsive picture and srcset markup.",
     badge: "For Devs",
     hoverColor: "#F59E0B",
-    href: process.env.NEXT_PUBLIC_CHOPSHOP_URL ?? "http://127.0.0.1:3002",
+    href: "https://chopshop-ashy.vercel.app",
     Icon: ImageIcon
   },
   {
     name: "SlimFont",
-    description: "Subset heavy fonts to drastically reduce page load times.",
+    description: "Reduce font files for faster page loads.",
     badge: "For Devs",
     hoverColor: "#3B82F6",
-    href: process.env.NEXT_PUBLIC_SLIMFONT_URL ?? "http://127.0.0.1:3003",
+    href: "https://slimfont-eight.vercel.app",
     Icon: Type
   },
   {
     name: "TagTeam",
-    description: "Batch-convert raw SVGs into clean React/Vue components.",
+    description: "Convert SVG files into React and Vue components.",
     badge: "For Devs",
     hoverColor: "#10B981",
-    href: process.env.NEXT_PUBLIC_TAGTEAM_URL ?? "http://127.0.0.1:3004",
+    href: "https://tagteam-ten.vercel.app",
     Icon: Code2
   },
   {
     name: "SafeSpace",
-    description: "Crop videos and photos perfectly for social media safe zones.",
+    description: "Crop videos and images for social safe zones.",
     badge: "For Designers",
     hoverColor: "#FF385C",
-    href: process.env.NEXT_PUBLIC_SAFESPACE_URL ?? "http://127.0.0.1:3005",
+    href: "https://safespace-gray.vercel.app",
     Icon: Crop
+  },
+  {
+    name: "UIColorGenerator",
+    description: "Generate playful palettes mapped to production-ready tokens.",
+    badge: "For Designers",
+    hoverColor: "#8B5CF6",
+    href: "https://github.com/Ictraeh/uicolor-generator",
+    Icon: Palette
   }
 ];
 
@@ -70,6 +81,7 @@ const valueProps = [
 
 export default function Home() {
   const reduceMotion = useReducedMotion();
+  const [query, setQuery] = useState("");
 
   const heroVariant: Variants = {
     hidden: { opacity: 0, y: reduceMotion ? 0 : 24 },
@@ -99,14 +111,51 @@ export default function Home() {
     }
   };
 
+  const filteredTools = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) return tools;
+
+    return tools.filter((tool) => {
+      return (
+        tool.name.toLowerCase().includes(normalized) ||
+        tool.description.toLowerCase().includes(normalized) ||
+        tool.badge.toLowerCase().includes(normalized)
+      );
+    });
+  }, [query]);
+
   return (
     <main className="mx-auto min-h-screen w-full max-w-6xl px-6 py-10 md:px-8 md:py-16">
       <section className="flex flex-col gap-8 border-b border-[#E8E8ED] pb-14 md:gap-10 md:pb-20">
+        <motion.div
+          variants={heroVariant}
+          initial="hidden"
+          animate="show"
+          className="w-full max-w-xl"
+        >
+          <label
+            htmlFor="tool-search"
+            className="mb-2 block text-xs font-medium uppercase tracking-[0.15em] text-[#86868B]"
+          >
+            Search Tools
+          </label>
+          <div className="flex items-center gap-2 rounded-full border border-[#E8E8ED] bg-[#F5F5F7] px-4 py-3 focus-within:border-[#6859E8] focus-within:ring-2 focus-within:ring-[#CCAFFF]">
+            <Search className="h-4 w-4 text-[#86868B]" />
+            <input
+              id="tool-search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search by name, purpose, or role"
+              className="w-full bg-transparent text-sm text-[#1D1D1F] placeholder:text-[#86868B] focus:outline-none"
+            />
+          </div>
+        </motion.div>
+
         <motion.p
           variants={heroVariant}
           initial="hidden"
           animate="show"
-          className="text-sm font-medium uppercase tracking-[0.2em] text-[#6B7280]"
+          className="text-sm font-medium uppercase tracking-[0.2em] text-[#86868B]"
         >
           Developer & Designer Micro-Tools
         </motion.p>
@@ -126,10 +175,10 @@ export default function Home() {
           initial="hidden"
           animate="show"
           transition={{ delay: reduceMotion ? 0 : 0.2 }}
-          className="max-w-3xl text-base leading-relaxed text-[#6B7280] md:text-lg"
+          className="max-w-3xl text-base leading-relaxed text-[#86868B] md:text-lg"
         >
-          Lightning-fast, browser-based utilities to save designers and developers
-          from everyday friction. No servers, no sign-ups.
+          Fast browser tools for everyday design and development tasks. No
+          sign-up. No setup.
         </motion.p>
 
         <motion.a
@@ -138,7 +187,7 @@ export default function Home() {
           initial="hidden"
           animate="show"
           transition={{ delay: reduceMotion ? 0 : 0.3 }}
-          className="inline-flex w-fit items-center justify-center rounded-full bg-[#111111] px-7 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111111] focus-visible:ring-offset-2"
+          className="inline-flex w-fit items-center justify-center rounded-full bg-[#1D1D1F] px-7 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(104,89,232,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6859E8] focus-visible:ring-offset-2"
         >
           Explore the Tools
         </motion.a>
@@ -151,43 +200,54 @@ export default function Home() {
           animate="show"
           className="grid grid-cols-1 gap-4 md:grid-cols-2"
         >
-          {tools.map((tool) => (
-            <motion.a
+          {filteredTools.map((tool) => (
+            <motion.div
               key={tool.name}
-              href={tool.href}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={`Open ${tool.name}`}
               variants={cardVariant}
-              whileHover={reduceMotion ? undefined : { y: -5 }}
+              className="h-full"
               style={
                 {
                   "--hover-color": tool.hoverColor
                 } as React.CSSProperties
               }
-              className="group block rounded-2xl border border-[#E8E8ED] bg-white p-6 shadow-[0_0_0_rgba(0,0,0,0)] transition-all duration-300 hover:border-[var(--hover-color)] hover:shadow-[0_12px_28px_rgba(17,17,17,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6859E8] focus-visible:ring-offset-2"
             >
-              <div className="mb-5 flex items-center justify-between gap-4">
-                <span className="inline-flex items-center rounded-full border border-[#E8E8ED] px-3 py-1 text-xs font-medium text-[#6B7280] transition-colors duration-300 group-hover:border-[var(--hover-color)] group-hover:text-[#111111]">
-                  {tool.badge}
-                </span>
-                <tool.Icon className="h-6 w-6 text-[#111111] transition-colors duration-300 group-hover:text-[var(--hover-color)]" />
-              </div>
-              <h2 className="mb-3 text-3xl tracking-[-0.01em]">{tool.name}</h2>
-              <p className="text-sm leading-relaxed text-[#6B7280] md:text-base">
-                {tool.description}
-              </p>
-            </motion.a>
+              <a
+                href={tool.href}
+                aria-label={`Open ${tool.name}`}
+                className="group block h-full rounded-2xl border border-[#E8E8ED] bg-white p-6 shadow-[0_0_0_rgba(0,0,0,0)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--hover-color)] hover:shadow-[0_12px_28px_rgba(17,17,17,0.08)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6859E8] focus-visible:ring-offset-2"
+              >
+                <div className="mb-5 flex items-center justify-between gap-4">
+                  <span className="inline-flex items-center rounded-full border border-[#E8E8ED] px-3 py-1 text-xs font-medium text-[#86868B] transition-colors duration-300 group-hover:border-[var(--hover-color)] group-hover:text-[#1D1D1F]">
+                    {tool.badge}
+                  </span>
+                  <tool.Icon className="h-6 w-6 text-[#1D1D1F] transition-colors duration-300 group-hover:text-[var(--hover-color)]" />
+                </div>
+                <h2 className="mb-3 text-3xl tracking-[-0.01em] text-[#1D1D1F]">
+                  {tool.name}
+                </h2>
+                <p className="text-sm leading-relaxed text-[#86868B] md:text-base">
+                  {tool.description}
+                </p>
+              </a>
+            </motion.div>
           ))}
         </motion.div>
+
+        {filteredTools.length === 0 ? (
+          <div className="mt-4 rounded-2xl border border-[#E8E8ED] bg-white p-6 text-sm text-[#86868B]">
+            No tools found. Try a different keyword.
+          </div>
+        ) : null}
       </section>
 
       <section className="border-y border-[#E8E8ED] py-12 md:py-14">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
           {valueProps.map((item) => (
             <div key={item.title} className="space-y-2">
-              <h3 className="text-2xl tracking-[-0.01em]">{item.title}</h3>
-              <p className="text-sm leading-relaxed text-[#6B7280] md:text-base">
+              <h3 className="text-2xl tracking-[-0.01em] text-[#1D1D1F]">
+                {item.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-[#86868B] md:text-base">
                 {item.text}
               </p>
             </div>
@@ -195,14 +255,14 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="flex flex-col items-start justify-between gap-4 py-8 text-sm text-[#6B7280] md:flex-row md:items-center">
-        <p>Build by Ictraeh</p>
+      <footer className="flex flex-col items-start justify-between gap-4 py-8 text-sm text-[#86868B] md:flex-row md:items-center">
+        <p>Built by Ictraeh</p>
         <div className="flex items-center gap-5">
           <a
             href="https://github.com"
             target="_blank"
             rel="noreferrer"
-            className="transition-colors hover:text-[#111111]"
+            className="transition-colors hover:text-[#1D1D1F]"
           >
             GitHub
           </a>
@@ -210,7 +270,7 @@ export default function Home() {
             href="https://twitter.com"
             target="_blank"
             rel="noreferrer"
-            className="transition-colors hover:text-[#111111]"
+            className="transition-colors hover:text-[#1D1D1F]"
           >
             Twitter
           </a>

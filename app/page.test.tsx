@@ -1,7 +1,11 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import Home from "./page";
+
+afterEach(() => {
+  cleanup();
+});
 
 vi.mock("framer-motion", async () => {
   const ReactModule = await import("react");
@@ -45,7 +49,7 @@ vi.mock("framer-motion", async () => {
 });
 
 describe("Landing page", () => {
-  it("renders hero content and all tool cards", () => {
+  it("renders hero content, search bar, and tool cards", () => {
     render(<Home />);
 
     expect(
@@ -58,9 +62,31 @@ describe("Landing page", () => {
     expect(screen.getByText("SlimFont")).toBeInTheDocument();
     expect(screen.getByText("TagTeam")).toBeInTheDocument();
     expect(screen.getByText("SafeSpace")).toBeInTheDocument();
+    expect(screen.getByText("UIColorGenerator")).toBeInTheDocument();
+    expect(screen.getByLabelText("Search Tools")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Explore the Tools" })).toHaveAttribute(
       "href",
       "#tools"
     );
+  });
+
+  it("filters tools with search", () => {
+    render(<Home />);
+
+    const input = screen.getByLabelText("Search Tools");
+    fireEvent.change(input, { target: { value: "font" } });
+
+    expect(screen.getByText("SlimFont")).toBeInTheDocument();
+    expect(screen.queryByText("ChopShop")).not.toBeInTheDocument();
+  });
+
+  it("finds the UI color tool by search keyword", () => {
+    render(<Home />);
+
+    const input = screen.getByLabelText("Search Tools");
+    fireEvent.change(input, { target: { value: "color" } });
+
+    expect(screen.getByText("UIColorGenerator")).toBeInTheDocument();
+    expect(screen.queryByText("SlimFont")).not.toBeInTheDocument();
   });
 });
