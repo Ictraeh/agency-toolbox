@@ -59,7 +59,7 @@ const tools: Tool[] = [
     description: "Generate playful palettes mapped to production-ready tokens.",
     badge: "For Designers",
     hoverColor: "#8B5CF6",
-    href: "https://github.com/Ictraeh/uicolor-generator",
+    href: "https://uicolor-generator.vercel.app",
     Icon: Palette
   }
 ];
