@@ -63,6 +63,7 @@ describe("Landing page", () => {
     expect(screen.getByText("TagTeam")).toBeInTheDocument();
     expect(screen.getByText("SafeSpace")).toBeInTheDocument();
     expect(screen.getByText("UIColorGenerator")).toBeInTheDocument();
+    expect(screen.getByText("VibePrompt")).toBeInTheDocument();
     expect(screen.getByLabelText("Search Tools")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Explore the Tools" })).toHaveAttribute(
       "href",
@@ -88,5 +89,15 @@ describe("Landing page", () => {
 
     expect(screen.getByText("UIColorGenerator")).toBeInTheDocument();
     expect(screen.queryByText("SlimFont")).not.toBeInTheDocument();
+  });
+
+  it("finds the vibe prompt tool by search keyword", () => {
+    render(<Home />);
+
+    const input = screen.getByLabelText("Search Tools");
+    fireEvent.change(input, { target: { value: "vibe" } });
+
+    expect(screen.getByText("VibePrompt")).toBeInTheDocument();
+    expect(screen.queryByText("ChopShop")).not.toBeInTheDocument();
   });
 });

@@ -7,6 +7,7 @@ import {
   Image as ImageIcon,
   Palette,
   Search,
+  Sparkles,
   Type
 } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
@@ -61,6 +62,15 @@ const tools: Tool[] = [
     hoverColor: "#8B5CF6",
     href: "https://uicolor-generator.vercel.app",
     Icon: Palette
+  },
+  {
+    name: "VibePrompt",
+    description:
+      "Build structured vibe-coding prompts from industry, stack, motion, and style choices.",
+    badge: "For Designers",
+    hoverColor: "#EC4899",
+    href: "https://websitepromptgenerator.vercel.app/",
+    Icon: Sparkles
   }
 ];
 
