@@ -64,6 +64,7 @@ describe("Landing page", () => {
     expect(screen.getByText("SafeSpace")).toBeInTheDocument();
     expect(screen.getByText("UIColorGenerator")).toBeInTheDocument();
     expect(screen.getByText("VibePrompt")).toBeInTheDocument();
+    expect(screen.getByText("Mood to Motion")).toBeInTheDocument();
     expect(screen.getByLabelText("Search Tools")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Explore the Tools" })).toHaveAttribute(
       "href",
@@ -98,6 +99,16 @@ describe("Landing page", () => {
     fireEvent.change(input, { target: { value: "vibe" } });
 
     expect(screen.getByText("VibePrompt")).toBeInTheDocument();
+    expect(screen.queryByText("ChopShop")).not.toBeInTheDocument();
+  });
+
+  it("finds the mood to motion tool by search keyword", () => {
+    render(<Home />);
+
+    const input = screen.getByLabelText("Search Tools");
+    fireEvent.change(input, { target: { value: "motion" } });
+
+    expect(screen.getByText("Mood to Motion")).toBeInTheDocument();
     expect(screen.queryByText("ChopShop")).not.toBeInTheDocument();
   });
 });

@@ -5,6 +5,7 @@ import {
   Code2,
   Crop,
   Image as ImageIcon,
+  Orbit,
   Palette,
   Search,
   Sparkles,
@@ -71,6 +72,15 @@ const tools: Tool[] = [
     hoverColor: "#EC4899",
     href: "https://websitepromptgenerator.vercel.app/",
     Icon: Sparkles
+  },
+  {
+    name: "Mood to Motion",
+    description:
+      "Preview how feeling tags map to motion: element, effect, interaction, and background in one live canvas.",
+    badge: "For Designers",
+    hoverColor: "#0EA5E9",
+    href: "https://moodtomotion.vercel.app/",
+    Icon: Orbit
   }
 ];
 
