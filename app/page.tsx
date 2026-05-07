@@ -5,6 +5,7 @@ import {
   Code2,
   Crop,
   Image as ImageIcon,
+  Minimize2,
   Orbit,
   Palette,
   Search,
@@ -55,6 +56,15 @@ const tools: Tool[] = [
     hoverColor: "#FF385C",
     href: "https://safespace-gray.vercel.app",
     Icon: Crop
+  },
+  {
+    name: "Shrink",
+    description:
+      "Compress photos and video for the web — smaller files, ready to ship.",
+    badge: "For Designers",
+    hoverColor: "#0071E3",
+    href: "https://image-and-video-compression.vercel.app",
+    Icon: Minimize2
   },
   {
     name: "UIColorGenerator",
